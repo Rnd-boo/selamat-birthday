@@ -1,5 +1,6 @@
 import { ConfettiFireworks } from "./confetti-fireworks"
 import { motion } from "motion/react"
+import bgMessage from "@/assets/bg-message.jpeg"
 
 export default function Message() {
   return (
@@ -7,7 +8,7 @@ export default function Message() {
       <ConfettiFireworks />
 
       <img
-        src="/assets/bg-message.jpeg"
+        src={bgMessage}
         alt="Photocard"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
