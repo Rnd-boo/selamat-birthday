@@ -20,15 +20,15 @@ export function BirthdayComponent() {
           <div className="mb-20 flex flex-col items-center">
             <h1 className="text-xl">Swipe UP</h1>
             <DotLottieReact
-              src="public/swipe-arrow.lottie"
+              src="src/assets/swipe-arrow.lottie"
               loop
               autoplay
               className="size-16"
             />
           </div>
-          <img src="public/3.png" />
-          <img src="public/Background.png" />
-          <img src="public/4.png" className="mt-16" />
+          <img src="src/assets/3.png" />
+          <img src="src/assets/Background.png" />
+          <img src="src/assets/4.png" className="mt-16" />
           <div className="h-300"></div>
           <div className="fixed bottom-0 z-10 w-full">
             <svg
