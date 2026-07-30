@@ -1,17 +1,27 @@
-import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
+import { TerminalComponent } from "./components/common/terminal"
+import { BirthdayBoxComponent } from "./components/common/birthday"
 
 export function App() {
+  const [input, setInput] = useState("")
+  const [showMain, setShowMain] = useState(false)
+
+  const isCorrect = input.trim().toLowerCase() === "pecel"
+
+  useEffect(() => {
+    if (!isCorrect) return
+
+    const timer = setTimeout(() => {
+      setShowMain(true)
+    }, 3800)
+    return () => clearTimeout(timer)
+  }, [isCorrect])
+
   return (
     <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
+      <div className="flex w-full min-w-0 flex-col items-center justify-center gap-4 text-sm leading-loose">
         <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
+          <BirthdayBoxComponent />
         </div>
       </div>
     </div>
