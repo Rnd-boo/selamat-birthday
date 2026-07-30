@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { TerminalComponent } from "./components/common/terminal"
-import { BirthdayBoxComponent } from "./components/common/birthday"
+import { BirthdayComponent } from "./components/common/birthday"
 
 export function App() {
   const [input, setInput] = useState("")
@@ -21,7 +21,15 @@ export function App() {
     <div className="flex min-h-svh p-6">
       <div className="flex w-full min-w-0 flex-col items-center justify-center gap-4 text-sm leading-loose">
         <div>
-          <BirthdayBoxComponent />
+          {showMain ? (
+            <BirthdayComponent />
+          ) : (
+            <TerminalComponent
+              input={input}
+              setInput={setInput}
+              isCorrect={isCorrect}
+            />
+          )}
         </div>
       </div>
     </div>

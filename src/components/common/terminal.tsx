@@ -16,7 +16,7 @@ export function TerminalComponent({
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="bg-transparent outline-none"
+          className="bg-transparent underline"
           autoFocus
           disabled={isCorrect}
         />
