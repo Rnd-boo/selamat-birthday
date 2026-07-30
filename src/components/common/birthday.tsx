@@ -1,6 +1,9 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useEffect, useState } from "react"
 import Message from "./message"
+import img3 from "@/assets/3.png"
+import img4 from "@/assets/4.png"
+import imgback from "@/assets/Background.png"
 
 export function BirthdayComponent() {
   const [timer, setTimer] = useState<boolean>(false)
@@ -26,9 +29,9 @@ export function BirthdayComponent() {
               className="size-16"
             />
           </div>
-          <img src="/assets/3.png" />
-          <img src="/assets/Background.png" />
-          <img src="/assets/4.png" className="mt-16" />
+          <img src={img3} />
+          <img src={imgback} />
+          <img src={img4} className="mt-16" />
           <div className="h-300"></div>
           <div className="fixed bottom-0 z-10 w-full">
             <svg
