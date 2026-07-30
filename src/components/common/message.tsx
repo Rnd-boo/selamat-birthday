@@ -7,7 +7,7 @@ export default function Message() {
       <ConfettiFireworks />
 
       <img
-        src="src/assets/bg-message.jpeg"
+        src="/assets/bg-message.jpeg"
         alt="Photocard"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
