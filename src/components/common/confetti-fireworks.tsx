@@ -3,12 +3,12 @@ import confetti from "canvas-confetti"
 
 export function ConfettiFireworks() {
   useEffect(() => {
-    const duration = 5 * 1000
+    const duration = 6 * 1000
     const animationEnd = Date.now() + duration
     const defaults = {
       startVelocity: 30,
       spread: 360,
-      ticks: 60,
+      ticks: 120,
       zIndex: 100,
     }
 
