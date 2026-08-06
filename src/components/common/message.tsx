@@ -1,6 +1,6 @@
 import { ConfettiFireworks } from "./confetti-fireworks"
 import { motion } from "motion/react"
-import bgMessage from "@/assets/bg-message.jpeg"
+import bgMessage from "@/assets/bg-message.webp"
 
 export default function Message() {
   return (

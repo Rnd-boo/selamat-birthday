@@ -2,13 +2,14 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { useEffect, useState } from "react"
 import Message from "./message"
 
-import img3 from "@/assets/3.png"
-import img4 from "@/assets/4.png"
-import imgback from "@/assets/Background.png"
+import img3 from "@/assets/3.webp"
+import img4 from "@/assets/4.webp"
+import Image1 from "@/assets/img1.webp"
+import Image2 from "@/assets/img2.webp"
+import Image3 from "@/assets/img3.webp"
 
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Lenis from "lenis"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -112,21 +113,6 @@ export function BirthdayComponent() {
       cake.kill()
     }
   }, [timer])
-  useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.04,
-      wheelMultiplier: 0.5,
-    })
-
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
-    requestAnimationFrame(raf)
-
-    return () => lenis.destroy()
-  }, [])
 
   return (
     <div>
@@ -134,8 +120,8 @@ export function BirthdayComponent() {
         <Message />
       ) : (
         <div>
-          <div className="birthday-section flex w-full flex-col items-center overflow-y-hidden border pt-64">
-            <div className="swipe-up mb-40 flex flex-col items-center">
+          <div className="birthday-section flex w-full flex-col items-center overflow-y-auto overscroll-contain border pt-64">
+            <div className="swipe-up mb-60 flex flex-col items-center">
               <h1 className="text-xl">Swipe UP</h1>
 
               <DotLottieReact
@@ -146,11 +132,13 @@ export function BirthdayComponent() {
               />
             </div>
 
-            <img src={img3} alt="" />
+            <img src={img3} loading="eager" />
 
-            <img src={imgback} alt="" />
+            <img src={Image1} className="w-3/4 rotate-4" loading="eager" />
+            <img src={Image2} className="my-20 w-3/4" loading="eager" />
+            <img src={Image3} className="w-3/4 -rotate-7" loading="eager" />
 
-            <img src={img4} className="mt-16 size-80" alt="" />
+            <img src={img4} className="mt-16 size-80" loading="eager" />
 
             {/* Gift fixed at bottom */}
             <div className="pointer-events-none fixed -bottom-10 left-0 z-10 flex w-full justify-center">
