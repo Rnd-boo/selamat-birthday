@@ -10,7 +10,7 @@ export function TerminalComponent({
   isCorrect: boolean
 }) {
   return (
-    <Terminal sequence={false} className="h-80 w-80">
+    <Terminal sequence={false} className="h-80 w-60">
       <TypingAnimation>$ input secret code</TypingAnimation>
       <AnimatedSpan delay={0}>
         <input
