@@ -10,13 +10,13 @@ export function TerminalComponent({
   isCorrect: boolean
 }) {
   return (
-    <Terminal sequence={false}>
+    <Terminal sequence={false} className="h-80 w-80">
       <TypingAnimation>$ input secret code</TypingAnimation>
       <AnimatedSpan delay={0}>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="bg-transparent underline"
+          className="w-1/2 bg-muted"
           autoFocus
           disabled={isCorrect}
         />
