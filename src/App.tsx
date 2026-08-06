@@ -21,7 +21,15 @@ export function App() {
     <div className="flex min-h-svh">
       <div className="flex w-full min-w-0 flex-col items-center justify-center gap-4 text-sm leading-loose">
         <div>
-          <BirthdayComponent />
+          {showMain ? (
+            <BirthdayComponent />
+          ) : (
+            <TerminalComponent
+              input={input}
+              setInput={setInput}
+              isCorrect={isCorrect}
+            />
+          )}
         </div>
       </div>
     </div>
