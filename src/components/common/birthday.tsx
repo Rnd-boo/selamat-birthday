@@ -1,5 +1,5 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Message from "./message"
 
 import img3 from "@/assets/3.webp"
@@ -10,11 +10,13 @@ import Image3 from "@/assets/img3.webp"
 
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import Lenis from "lenis"
 
 gsap.registerPlugin(ScrollTrigger)
 
 export function BirthdayComponent() {
   const [timer, setTimer] = useState(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const showMemo = setTimeout(() => {
@@ -24,93 +26,140 @@ export function BirthdayComponent() {
     return () => clearTimeout(showMemo)
   }, [])
 
+  // Lenis <-> GSAP ticker sync (runs once, independent of timer)
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.04,
+      wheelMultiplier: 0.5,
+    })
+
+    lenis.on("scroll", ScrollTrigger.update)
+
+    const rafCallback = (time: number) => {
+      lenis.raf(time * 1000)
+    }
+    gsap.ticker.add(rafCallback)
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      gsap.ticker.remove(rafCallback)
+      lenis.destroy()
+    }
+  }, [])
+
+  // ScrollTrigger animations — only created once `timer` is true
+  // and only after images inside the section have finished loading
   useEffect(() => {
     if (!timer) return
 
-    // 1. Open the lid
-    const openTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: document.body,
-        start: "top top",
-        end: "+=400",
-        scrub: true,
-      },
-    })
+    const section = sectionRef.current
+    if (!section) return
 
-    openTl.to("#lid", {
-      y: -40,
-      rotation: -15,
-      autoAlpha: 0,
-      transformOrigin: "50% 100%",
-      ease: "power1.in",
-    })
+    const images = Array.from(section.querySelectorAll("img"))
 
-    const shakeTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".birthday-section",
-        start: "top center",
-        end: "bottom bottom",
-        scrub: true,
-      },
-    })
+    const waitForImages = Promise.all(
+      images.map((img) =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise<void>((resolve) => {
+              img.onload = () => resolve()
+              img.onerror = () => resolve()
+            })
+      )
+    )
 
-    shakeTl.to("#giftbox", {
-      keyframes: [
-        { rotation: -1 },
-        { rotation: 1 },
-        { rotation: -1 },
-        { rotation: 1 },
-        { rotation: -2 },
-        { rotation: 2 },
-        { rotation: -2 },
-        { rotation: 2 },
-        { rotation: 0 },
-      ],
-      transformOrigin: "50% 100%",
-      ease: "none",
-    })
+    let ctx: gsap.Context | undefined
+    let cancelled = false
 
-    const explodeTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".birthday-section",
-        start: "bottom bottom",
-        end: "+=540",
-        scrub: true,
-      },
-    })
+    waitForImages.then(() => {
+      if (cancelled) return
 
-    explodeTl.to("#box", {
-      scale: 2,
-      autoAlpha: 0,
-      transformOrigin: "50% 100%",
-      ease: "none",
-    })
+      ctx = gsap.context(() => {
+        // 1. Open the lid
+        const openTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: document.body,
+            start: "top top",
+            end: "+=400",
+            scrub: true,
+          },
+        })
 
-    const cake = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".birthday-section",
-        start: "bottom bottom",
-        end: "+=540",
-        scrub: true,
-      },
-    })
+        openTl.to("#lid", {
+          y: -40,
+          rotation: -15,
+          autoAlpha: 0,
+          transformOrigin: "50% 100%",
+          ease: "power1.in",
+        })
 
-    cake.to(".bCake", {
-      scale: 2,
-      autoAlpha: 1,
-      transformOrigin: "50% 100%",
-      ease: "none",
+        // 2. Shake the box
+        const shakeTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".birthday-section",
+            start: "top center",
+            end: "bottom bottom",
+            scrub: true,
+          },
+        })
+
+        shakeTl.to("#giftbox", {
+          keyframes: [
+            { rotation: -1 },
+            { rotation: 1 },
+            { rotation: -1 },
+            { rotation: 1 },
+            { rotation: -2 },
+            { rotation: 2 },
+            { rotation: -2 },
+            { rotation: 2 },
+            { rotation: 0 },
+          ],
+          transformOrigin: "50% 100%",
+          ease: "none",
+        })
+
+        // 3. Box explodes + cake appears — same trigger window,
+        // merged into one timeline so they can never drift apart
+        const explodeTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".birthday-section",
+            start: "bottom bottom",
+            end: "+=540",
+            scrub: true,
+          },
+        })
+
+        explodeTl
+          .to(
+            "#box",
+            {
+              scale: 2,
+              autoAlpha: 0,
+              transformOrigin: "50% 100%",
+              ease: "none",
+            },
+            0
+          )
+          .to(
+            ".bCake",
+            {
+              scale: 2,
+              autoAlpha: 1,
+              transformOrigin: "50% 100%",
+              ease: "none",
+            },
+            0
+          )
+
+        // recalc all trigger start/end values against final layout
+        ScrollTrigger.refresh()
+      }, section)
     })
 
     return () => {
-      openTl.scrollTrigger?.kill()
-      openTl.kill()
-      shakeTl.scrollTrigger?.kill()
-      shakeTl.kill()
-      explodeTl.scrollTrigger?.kill()
-      explodeTl.kill()
-      cake.scrollTrigger?.kill()
-      cake.kill()
+      cancelled = true
+      ctx?.revert()
     }
   }, [timer])
 
@@ -119,8 +168,8 @@ export function BirthdayComponent() {
       {!timer ? (
         <Message />
       ) : (
-        <div>
-          <div className="birthday-section flex w-full flex-col items-center overflow-y-auto overscroll-contain border pt-64">
+        <div ref={sectionRef}>
+          <div className="birthday-section flex w-full flex-col items-center overflow-y-hidden border pt-64">
             <div className="swipe-up mb-60 flex flex-col items-center">
               <h1 className="text-xl">Swipe UP</h1>
 
@@ -132,7 +181,7 @@ export function BirthdayComponent() {
               />
             </div>
 
-            <img src={img3} loading="eager" />
+            <img src={img3} width={400} height={400} alt="" />
 
             <img src={Image1} className="w-3/4 rotate-4" loading="eager" />
             <img src={Image2} className="my-20 w-3/4" loading="eager" />

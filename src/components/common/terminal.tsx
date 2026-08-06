@@ -17,7 +17,6 @@ export function TerminalComponent({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           className="w-1/2 bg-muted"
-          autoFocus
           disabled={isCorrect}
         />
       </AnimatedSpan>
