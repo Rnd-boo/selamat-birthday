@@ -16,6 +16,15 @@ export function App() {
     }, 3800)
     return () => clearTimeout(timer)
   }, [isCorrect])
+  const isMobile = window.matchMedia("(max-width: 768px)").matches
+
+  if (!isMobile) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <h1>This website is only available on mobile.</h1>
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-svh">
