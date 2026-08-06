@@ -164,12 +164,12 @@ export function BirthdayComponent() {
   }, [timer])
 
   return (
-    <div className="h-svh border">
+    <div>
       {!timer ? (
         <Message />
       ) : (
         <div ref={sectionRef}>
-          <div className="birthday-section flex h-full w-full flex-col items-center overflow-y-hidden pt-64">
+          <div className="birthday-section flex w-full flex-col items-center pt-64">
             <div className="swipe-up mb-60 flex flex-col items-center">
               <h1 className="text-xl">Swipe UP</h1>
 
